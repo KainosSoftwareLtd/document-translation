@@ -24,6 +24,7 @@ import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { formatJobNameId } from "../../util/formatJobNameId";
 import { formatTimestamp } from "../../util/formatTimestamp";
 import { getPresignedUrl } from "../../util/getPresignedUrl";
+import { formatEstimatedCompletion } from "../../util/formatEstimatedCompletion";
 import { describeS3Key } from "./util/describeS3Key";
 
 const cfnOutputs = require("../../cfnOutputs.json");
@@ -160,6 +161,11 @@ export default function HistoryTable() {
 					id: "createdAt",
 					header: t("generic_created"),
 					cell: (item: Item) => formatTimestamp(item.createdAt),
+				},
+				{
+					id: "estimatedCompletion",
+					header: "Estimated Completion",
+					cell: (item: Item) => formatEstimatedCompletion(item.createdAt, item.jobStatus),
 				},
 				{
 					id: "source",
