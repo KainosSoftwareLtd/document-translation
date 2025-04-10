@@ -133,6 +133,9 @@ export default function HistoryTable() {
 		try {
 			const keys = JSON.parse(stringKeys);
 
+			// Immediately open all windows to avoid popup blockers
+			const windows = keys.map(() => window.open('', '_blank', 'noopener,noreferrer'));
+
 			for (var i in keys) {
 				const k = describeS3Key({
 					key: keys[i],
@@ -141,7 +144,9 @@ export default function HistoryTable() {
 					path: `${k.scope}/${k.identity}/${k.jobId}/${k.stage}/${k.translateId}/${k.filename}`,
 					bucketKey: "awsUserFilesS3Bucket",
 				});
-				window.open(presignedUrl, "_blank", "noopener,noreferrer");
+
+				const newWindow = windows[i];
+				newWindow.location.href = presignedUrl;
 			}
 		} catch (err) {
 			console.log("error: ", err);
