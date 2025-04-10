@@ -135,12 +135,12 @@ export default function HistoryTable() {
 
 			// Immediately open all windows to avoid popup blockers
 			const windows = [];
-			for (var i in keys) {
+			for (let i = 0; i < keys.length; i++) {
 				const newWindow = window.open('', '_blank', 'noopener,noreferrer');
 				windows.push(newWindow);
 			}
 
-			for (var i in keys) {
+			for (let i = 0; i < keys.length; i++) {
 				const k = describeS3Key({
 					key: keys[i],
 				});
