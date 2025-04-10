@@ -133,14 +133,6 @@ export default function HistoryTable() {
 		try {
 			const keys = JSON.parse(stringKeys);
 
-			// Immediately open all windows to avoid popup blockers
-			const windows = {};
-			for (var i in keys) {
-				console.log("Creating window");
-				const newWindow = window.open('', '_blank', 'noopener,noreferrer');
-				windows[i] = newWindow;
-			}
-
 			for (var i in keys) {
 				const k = describeS3Key({
 					key: keys[i],
@@ -150,14 +142,14 @@ export default function HistoryTable() {
 					path: `${k.scope}/${k.identity}/${k.jobId}/${k.stage}/${k.translateId}/${k.filename}`,
 					bucketKey: "awsUserFilesS3Bucket",
 				});
+				const response = await fetch(presignedUrl);
 				console.log("Retrieved");
-
-				const newWindow = windows[i];
-				if (newWindow && presignedUrl) {
-				  newWindow.location.href = presignedUrl;
-				} else {
-				  console.warn("Window or URL was not valid:", newWindow, presignedUrl);
-				}
+				
+				const blob = await response.blob();
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = i;
+				link.click();
 			}
 		} catch (err) {
 			console.log("error: ", err);
