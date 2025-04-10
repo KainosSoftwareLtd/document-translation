@@ -136,6 +136,7 @@ export default function HistoryTable() {
 			// Immediately open all windows to avoid popup blockers
 			const windows = [];
 			for (let i = 0; i < keys.length; i++) {
+				console.log("Creating window");
 				const newWindow = window.open('', '_blank', 'noopener,noreferrer');
 				windows.push(newWindow);
 			}
@@ -144,13 +145,19 @@ export default function HistoryTable() {
 				const k = describeS3Key({
 					key: keys[i],
 				});
+				console.log("Fetching presigned url");
 				const presignedUrl = await getPresignedUrl({
 					path: `${k.scope}/${k.identity}/${k.jobId}/${k.stage}/${k.translateId}/${k.filename}`,
 					bucketKey: "awsUserFilesS3Bucket",
 				});
+				console.log("Retrieved");
 
 				const newWindow = windows[i];
-				newWindow.location.href = presignedUrl;
+				if (newWindow && presignedUrl) {
+				  newWindow.location.href = presignedUrl;
+				} else {
+				  console.warn("Window or URL was not valid:", newWindow, presignedUrl);
+				}
 			}
 		} catch (err) {
 			console.log("error: ", err);
