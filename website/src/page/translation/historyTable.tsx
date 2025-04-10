@@ -134,7 +134,11 @@ export default function HistoryTable() {
 			const keys = JSON.parse(stringKeys);
 
 			// Immediately open all windows to avoid popup blockers
-			const windows = keys.map(() => window.open('', '_blank', 'noopener,noreferrer'));
+			const windows any[] = [];
+			for (var i in keys) {
+				const newWindow = window.open('', '_blank', 'noopener,noreferrer');
+				windows.push(newWindow);
+			}
 
 			for (var i in keys) {
 				const k = describeS3Key({
