@@ -83,7 +83,7 @@ export class dt_translate extends Construct {
 					allowedOrigins: ["*"],
 					allowedHeaders: ["*"],
 					exposedHeaders: ["ETag"],
-					maxAgeSeconds: 3000
+					maxAge: 3000
 				},
 			],
 		});
