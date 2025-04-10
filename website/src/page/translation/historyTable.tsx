@@ -148,7 +148,7 @@ export default function HistoryTable() {
 				const blob = await response.blob();
 				const link = document.createElement('a');
 				link.href = window.URL.createObjectURL(blob);
-				link.download = i;
+				link.download = k.filename;
 				link.click();
 			}
 		} catch (err) {
