@@ -134,7 +134,7 @@ export default function HistoryTable() {
 			const keys = JSON.parse(stringKeys);
 
 			// Immediately open all windows to avoid popup blockers
-			const windows any[] = [];
+			const windows = [];
 			for (var i in keys) {
 				const newWindow = window.open('', '_blank', 'noopener,noreferrer');
 				windows.push(newWindow);
