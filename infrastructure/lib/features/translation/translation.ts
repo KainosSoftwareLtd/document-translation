@@ -79,10 +79,11 @@ export class dt_translate extends Construct {
 			removalPolicy: props.removalPolicy, // ASM-CFN1
 			cors: [
 				{
-					allowedMethods: [s3.HttpMethods.PUT, s3.HttpMethods.POST],
+					allowedMethods: [s3.HttpMethods.PUT, s3.HttpMethods.POST, s3.HttpMethods.HEAD, s3.HttpMethods.GET],
 					allowedOrigins: ["*"],
 					allowedHeaders: ["*"],
 					exposedHeaders: ["ETag"],
+					maxAge: 3000
 				},
 			],
 		});

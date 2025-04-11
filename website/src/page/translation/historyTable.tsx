@@ -24,6 +24,7 @@ import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { formatJobNameId } from "../../util/formatJobNameId";
 import { formatTimestamp } from "../../util/formatTimestamp";
 import { getPresignedUrl } from "../../util/getPresignedUrl";
+import { formatEstimatedCompletion } from "../../util/formatEstimatedCompletion";
 import { describeS3Key } from "./util/describeS3Key";
 
 const cfnOutputs = require("../../cfnOutputs.json");
@@ -136,11 +137,19 @@ export default function HistoryTable() {
 				const k = describeS3Key({
 					key: keys[i],
 				});
+				console.log("Fetching presigned url");
 				const presignedUrl = await getPresignedUrl({
 					path: `${k.scope}/${k.identity}/${k.jobId}/${k.stage}/${k.translateId}/${k.filename}`,
 					bucketKey: "awsUserFilesS3Bucket",
 				});
-				window.open(presignedUrl, "_blank", "noopener,noreferrer");
+				const response = await fetch(presignedUrl);
+				console.log("Retrieved");
+				
+				const blob = await response.blob();
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = k.filename;
+				link.click();
 			}
 		} catch (err) {
 			console.log("error: ", err);
@@ -160,6 +169,11 @@ export default function HistoryTable() {
 					id: "createdAt",
 					header: t("generic_created"),
 					cell: (item: Item) => formatTimestamp(item.createdAt),
+				},
+				{
+					id: "estimatedCompletion",
+					header: "Estimated Completion",
+					cell: (item: Item) => formatEstimatedCompletion(item.createdAt, item.jobStatus),
 				},
 				{
 					id: "source",
